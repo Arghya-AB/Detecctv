@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<style>
+    html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	background: linear-gradient(45deg, #49a09d, #5f2c82);
+	font-family: sans-serif;
+	font-weight: 100;
+}
+
+.container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+table {
+	width: 800px;
+	border-collapse: collapse;
+	overflow: hidden;
+	box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+th,
+td {
+	padding: 15px;
+	background-color: rgba(255,255,255,0.2);
+	color: #fff;
+}
+
+th {
+	text-align: left;
+}
+
+thead {
+	th {
+		background-color: #55608f;
+	}
+}
+
+tbody {
+	tr {
+		&:hover {
+			background-color: rgba(255,255,255,0.3);
+		}
+	}
+	td {
+		position: relative;
+		&:hover {
+			&:before {
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: -9999px;
+				bottom: -9999px;
+				background-color: rgba(255,255,255,0.2);
+				z-index: -1;
+			}
+		}
+	}
+}
+</style>
+<body>
+    <h1>Alerts</h1>
+</body>
+<script>
+    function startTimer() {
+        timer = setInterval(function() { 
+            fetch( 'http://127.0.0.1:5000/alerts' )
+        .then( response => response.json() )
+        .then( response => {
+            var arr = response;
+            var table = "<table>";
+            for (var v = 0; v < arr.length; v++) 
+            { 
+                table += `<tr><td> Alert at ${arr[v]["latitude"]}</td> <td>${arr[v]["longitude"]}</td> <td>Time: ${arr[v]["time"]}</td> <td>Type: ${arr[v]["type"]}</td></tr>`; 
+            }
+            table += "</table>";
+            document.body.innerHTML = `<h1> Alerts </h1>\n${table}`
+        } );
+        }, 200);
+    }
+    startTimer()
+</script>
+</html>
